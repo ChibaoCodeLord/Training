@@ -1,0 +1,70 @@
+﻿@model CourseModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Home/Course.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>CourseModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CourseId" />
+            <div class="form-group">
+                <label asp-for="CourseName" class="control-label"></label>
+                <input asp-for="CourseName" class="form-control" />
+                <span asp-validation-for="CourseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TuitionFee" class="control-label"></label>
+                <input asp-for="TuitionFee" class="form-control" />
+                <span asp-validation-for="TuitionFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxStudents" class="control-label"></label>
+                <input asp-for="MaxStudents" class="form-control" />
+                <span asp-validation-for="MaxStudents" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseImagePath" class="control-label"></label>
+                <input asp-for="CourseImagePath" class="form-control" />
+                <span asp-validation-for="CourseImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lecture" class="control-label"></label>
+                <input asp-for="Lecture" class="form-control" />
+                <span asp-validation-for="Lecture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

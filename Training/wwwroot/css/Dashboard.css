@@ -1,0 +1,198 @@
+﻿/* General styles for alerts */
+.alert {
+    padding: 20px;
+    transition: all .3s ease;
+    margin: 10px 0;
+}
+
+    .alert:hover, .alert:focus {
+        transform: scale(1.04);
+        -webkit-box-shadow: 0 8px 20px #e8e8e8;
+        box-shadow: 0 8px 20px #e8e8e8;
+    }
+
+    .alert .close {
+        opacity: 0;
+        transition: opacity .3s ease;
+    }
+
+    .alert:hover .close, .alert:focus .close {
+        opacity: .2;
+    }
+
+    .alert i {
+        min-width: 30px;
+        text-align: center;
+    }
+
+/* Specific styles for each alert type */
+.alert-success {
+    background: rgb(214,233,198);
+    background: linear-gradient(0deg, rgba(214,233,198,1) 0%, rgba(198,233,229,1) 100%);
+    width: 30%;
+    height: 100px;
+}
+
+.alert-info {
+    background: rgb(188,232,241);
+    background: linear-gradient(0deg, rgba(188,232,241,1) 0%, rgba(188,208,241,1) 100%);
+    width: 30%;
+    height: 100px;
+}
+
+.alert-warning {
+    background: rgb(250,235,204);
+    background: linear-gradient(0deg, rgba(250,235,204,1) 0%, rgba(250,227,204,1) 100%);
+    width: 30%;
+    height: 100px;
+}
+
+.alert-danger {
+    background: rgb(235,204,209);
+    background: linear-gradient(0deg, rgba(235,204,209,1) 0%, rgba(235,204,221,0.927608543417367) 100%);
+    width: 30%;
+    height: 100px;
+}
+.chart-container {
+    display: flex;
+    justify-content: center; /* Căn giữa ngang */
+    align-items: center;
+    width: 100%;
+    height: 500px; /* Tăng chiều cao để không bị bóp */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#StudentChart {
+    width: 100% !important;
+    max-width: 900px; /* Tăng độ rộng tối đa */
+    height: 100% !important;
+}
+
+/* Wrapper for the alert to ensure it's responsive */
+.alert-wrap {
+    width: 100%;
+    max-width: 500px; /* Limit the maximum width of the alert wrapper */
+    margin: 30px auto;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px; /* Adjust sidebar width */
+    background-color: #f8f9fa;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding-top: 20px;
+    overflow-y: auto;
+}
+
+    .sidebar .nav {
+        flex-direction: column;
+    }
+
+    .sidebar .nav-item {
+        padding: 10px 20px;
+    }
+
+    .sidebar .nav-link {
+        color: #333;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+
+        .sidebar .nav-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+/* Top navbar styles */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .navbar .navbar-brand {
+        font-weight: bold;
+    }
+
+    .navbar .nav-links {
+        list-style: none;
+        margin-left: auto;
+    }
+
+        .navbar .nav-links li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        .navbar .nav-links a {
+            color: #333;
+            text-decoration: none;
+        }
+
+    .navbar .auth-buttons a {
+        margin-left: 10px;
+    }
+
+/* Flexbox for main content */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-content {
+    margin-left: 300px; /* đẩy khỏi sidebar */
+    padding: 100px 20px 20px 40px; /* đẩy xuống để tránh topbar + dịch qua phải */
+    width: calc(100% - 200px);
+    box-sizing: border-box;
+}
+
+
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px; /* Reduce sidebar width on smaller screens */
+    }
+
+    #StudentChart {
+        height: 300px; /* Adjust chart height on smaller screens */
+    }
+
+    .alert {
+        width: 90%; /* Alert takes 90% width on small screens */
+        height: 80px; /* Reduce height of alert */
+    }
+
+    .alert-wrap {
+        width: 100%; /* Ensure alert wrapper takes full width on small screens */
+    }
+
+    .main-content {
+        padding-left: 0;
+        padding-top: 20px; /* Adjust top padding */
+    }
+}
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    background-color: #1C1C1C;
+}
+
+.main-content {
+    margin-left: 250px; /* Đẩy nội dung tránh khỏi sidebar */
+    padding: 20px;
+    width: calc(100% - 250px);
+}

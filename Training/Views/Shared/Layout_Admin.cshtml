@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - Training Center</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Custom.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar container">
+            <div class="logo-title">
+                <div class="logo">                 
+                </div>
+                <div class="hero-text">Chibao</div>
+            </div>
+            <ul class="nav-links">
+                <li><a class="@(ViewBag.Title == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">Home</a></li>
+                <li><a class="@(ViewBag.Title == "About" ? "active" : "")" href="@Url.Action("About", "Home")">About</a></li>
+                <li><a class="@(ViewBag.Title == "Course" ? "active" : "")" href="@Url.Action("Course", "Home")">Course</a></li>
+                <li><a class="@(ViewBag.Title == "Contact" ? "active" : "")" href="@Url.Action("Contact", "Home")">Contact</a></li>
+            </ul>
+            <div class="auth-buttons" style="display: flex; align-items: center; gap: 10px;">
+                <a href="@Url.Action("Manage_Admin", "Manage")" class="auth-icon">
+                    <img src="~/images/Guitar.jpg" alt="Sign In"
+                         style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;">
+                </a>
+                <a href="@Url.Action("LogOut", "Account")" class="btn btn-dark">Log Out</a>
+            </div>
+
+            <style>
+                .auth-buttons a {
+                    transition: transform 0.3s ease;
+                }
+
+                    .auth-buttons a:hover {
+                        transform: scale(1.1);
+                    }
+            </style>
+
+        </nav>
+    </header>
+
+    <main class="container mt-5">
+        @RenderBody()
+    </main>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

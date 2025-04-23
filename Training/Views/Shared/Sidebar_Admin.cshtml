@@ -1,0 +1,70 @@
+﻿@{
+    var title = ViewBag.Title as string ?? "";
+    var isDashboardActive = new[] { "Tài khoản", "Doanh thu theo tháng", "Dashboard" }.Contains(title);
+}
+<link href="~/css/Sidebar.css" rel="stylesheet" />
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<!-- Sidebar -->
+<div class="col-md-2 bg-light sidebar pt-4">
+    <ul class="nav flex-column">
+        <!-- Admin Panel -->
+        <li class="nav-item">
+            <a class="nav-link @(title == "Home" ? "active" : "")" href="@Url.Action("IndexUser", "Home")">
+                <i class="bi bi-house-door me-2"></i> Home
+            </a>
+        </li>
+
+        <!-- Dashboard with collapse submenu -->
+        <li class="nav-item">
+            <a class="nav-link @(isDashboardActive ? "active" : "")"
+               href="#dashboardSubmenu"
+               data-bs-toggle="collapse"
+               aria-expanded="@(isDashboardActive ? "true" : "false")">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                <i class="bi bi-chevron-@(isDashboardActive ? "up" : "down") float-end"></i>
+            </a>
+            <div class="collapse @(isDashboardActive ? "show" : "")" id="dashboardSubmenu">
+                <ul class="nav flex-column ps-4">
+                    <li class="nav-item">
+                        <a class="nav-link @(title == "Chart Course" ? "active" : "")"
+                           href="@Url.Action("Dashboard", "Manage")">
+                            <i class="bi bi-bar-chart-line me-2"></i> Chart Course
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(title == "Chart Revenue" ? "active" : "")"
+                           href="@Url.Action("CourseStatistics", "Manage")">
+                            <i class="bi bi-graph-up me-2"></i> Chart Revenue
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Other menu items -->
+        <li class="nav-item">
+            <a class="nav-link @(title == "Danh sách học sinh" ? "active" : "")" href="@Url.Action("Account_Manage", "Manage")">
+                <i class="bi bi-people-fill me-2"></i> Account
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(title == "Course" ? "active" : "")" href="@Url.Action("Index", "AdminCourse")">
+                <i class="bi bi-journal-text me-2"></i> Course
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link @(title == "Quản lý đăng ký khóa học" ? "active" : "")"
+               href="@Url.Action("Student_Manage", "Manage")">
+                <i class="bi bi-journal-check me-2"></i> Register
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<!-- Ensure Bootstrap JS is loaded -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

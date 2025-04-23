@@ -1,0 +1,50 @@
+﻿
+=
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.layout-wrapper {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #1C1C1C;
+    color: white;
+    position: fixed;
+    top: 56px; /* bằng chiều cao topbar */
+    left: 0;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+.main-content {
+    margin-left: 250px; /* chiều rộng sidebar */
+    padding: 30px;
+    padding-top: 86px; /* để không bị đè bởi topbar */
+    background-color: #f8f9fa;
+    width: 100%;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #1C1C1C;
+    color: #fff;
+}
+
+.badge {
+    font-size: 0.9rem;
+}
+

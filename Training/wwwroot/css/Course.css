@@ -1,0 +1,528 @@
+﻿
+    .navbar {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .navbar-categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .navbar-categories a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .navbar-categories a:hover {
+        background-color: #e9ecef;
+        color: #0066cc;
+    }
+
+    /* Compact Search Container */
+/* wwwroot/css/navbar.css - Ultra Compact Search Bar */
+
+.search-container {
+    position: relative;
+    width: 160px; /* Độ rộng ngắn hơn */
+    margin: 0 10px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 30px 8px 12px; /* Giảm padding bên phải */
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 13px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+    .search-input:focus {
+        outline: none;
+        border-color: #0099FF;
+        box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.2);
+    }
+
+    .search-input::placeholder {
+        color: #aaa;
+        font-style: italic;
+        font-size: 12px;
+    }
+
+/* Icon tìm kiếm sát cạnh */
+.search-button {
+    position: absolute;
+    right: 0px; 
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    padding: 0;
+    width: 18px;
+    height: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .search-button::after {
+        /*content: "⌕";*/ /* Unicode search icon gọn */
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .search-button:hover {
+        color: #0099FF;
+    }
+
+/* Hiệu ứng khi focus sẽ mở rộng nhẹ */
+.search-input:focus {
+    width: 220px;
+    padding-right: 30px; /* Giữ nguyên khoảng cách icon */
+}
+.search-input:focus {
+    width: 220px;
+    padding-right: 30px; /* Giữ nguyên khoảng cách icon */
+}
+    /* Add button styles */
+    .add-button {
+        padding: 8px 15px;
+        background-color: #0099FF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .add-button:hover {
+        background-color: #007acc;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .search-container {
+            width: 160px;
+            margin: 5px 0;
+        }
+    
+        .search-input:focus {
+            width: 200px;
+        }
+    }
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #F0F0F0;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+    }
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group input[type="number"],
+    .form-group textarea,
+    .form-group input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+.submit-btn {
+    background-color: #0099FF;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+    .submit-btn:hover {
+        background-color: #007acc;
+    }
+.tempdata-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.tempdata-table {
+    background-color: #f0f8ff;
+    color: #333;
+    border: 1px solid #3498db;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/.course-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 30px 60px;
+    background-color: #f8f9fc;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    margin-top: 40px;
+}
+
+.course-carousel {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+}
+
+    .course-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+.course-card {
+    position: relative;
+    flex: 0 0 300px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .course-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+
+.blog-entry {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.block-20 {
+    height: 180px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background-size: cover;
+    background-position: center;
+}
+
+.text {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+    .text i {
+        margin-right: 6px;
+        color: #007bff;
+    }
+
+    .text a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 500;
+    }
+
+        .text a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+.heading {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0;
+    color: #333;
+}
+
+.text p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.icon-cash {
+    font-weight: bold;
+    color: #28a745;
+    margin-right: 4px;
+}
+
+.carousel-btn {
+    position:relative;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 22px;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease;
+    /* Thêm dòng này để đảm bảo nó nằm đúng giữa phần course-carousel */
+    margin-top: -20px;
+}
+
+
+    .carousel-btn:hover {
+        background-color: #0056b3;
+    }
+
+.left-btn {
+    left: 150px;
+    top:1000px;
+}
+
+.right-btn {
+    right: 150px;
+    top:1000px;
+}
+
+.ion-ios-arrow-forward {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+    .ion-ios-arrow-forward:hover {
+        transform: translateX(5px);
+        color: #0056b3;
+    }
+
+
+/* Card styles */
+.blog-entry {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+    .blog-entry:hover {
+        transform: translateY(-5px);
+    }
+
+.block-20 {
+    height: 200px;
+    background-size: cover;
+    background-position: center center;
+    display: block;
+}
+
+.text {
+    padding: 20px;
+}
+
+.meta {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    background: transparent; /* Bỏ background màu xám */
+    color: #555; /* Màu chữ nhẹ hơn */
+    font-size: 14px;
+    margin-bottom: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font chữ đẹp */
+}
+
+    .meta div {
+        display: flex;
+        align-items: center;
+    }
+
+    .meta a {
+        color: #555;
+        text-decoration: none; /* Bỏ gạch chân */
+        transition: color 0.3s ease;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.05); /* Background nhẹ */
+    }
+
+        .meta a:hover {
+            color: #0099FF; /* Màu khi hover */
+            background: rgba(0, 153, 255, 0.1);
+        }
+
+    .meta .icon-cash {
+        margin-right: 5px;
+        color: #27ae60; /* Màu icon tiền */
+    }
+
+.heading {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+    .heading a {
+        color: #000;
+        text-decoration: none;
+    }
+.no-courses {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.delete-course-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 0, 0, 0.8);
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 20;
+    transition: background-color 0.3s ease;
+}
+
+    .delete-course-btn:hover {
+        background-color: rgba(200, 0, 0, 0.9);
+    }
+.edit-course-btn {
+    position: relative;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 123, 255, 0.8); /* Màu xanh dương */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
+    z-index: 20;
+    transition: background-color 0.3s ease;
+}
+
+    .edit-course-btn:hover {
+        background-color: rgba(0, 80, 180, 0.9);
+    }
+.Register-Course {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+    
+    .Register-Course:hover {
+        background-color: #0056b3;
+    }
+.registered-students {
+    float: right; /* Dịch phần tử sang bên phải */
+    text-align: right; /* Căn chỉnh văn bản sang phải */
+    margin-right: 50px; /* Dịch thêm sang phải */
+    display: flex; /* Sử dụng flex để căn chỉnh các phần tử bên trong */
+    align-items: center; /* Căn giữa biểu tượng và văn bản theo chiều dọc */
+}
+
+    .registered-students i {
+        margin-right: 5px; /* Khoảng cách giữa biểu tượng người và văn bản */
+    }
+

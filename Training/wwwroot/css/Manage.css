@@ -1,0 +1,119 @@
+﻿
+.sidebar {
+    background-color: #2c3e50; /* Màu xanh đậm như WooCommerce */
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #ecf0f1; /* Màu trắng nhạt */
+    padding: 12px 16px;
+    font-size: 15px;
+}
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+        background-color: #34495e; /* Màu nền khi hover hoặc active */
+        color: #ffffff;
+    }
+
+.sidebar h5 {
+    color: #ecf0f1;
+    padding: 16px;
+    border-bottom: 1px solid #7f8c8d;
+}
+
+avatar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.avatar-img {
+    width: 150px; /* Bạn có thể thay đổi kích thước avatar theo ý muốn */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd; /* Đặt viền cho avatar */
+}
+
+/*Mycourse*/
+
+.course-container {
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.course-header {
+    display: flex;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 2px solid #eee;
+}
+
+.course-row {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.course-name {
+    width: 40%;
+    padding-right: 15px;
+}
+
+.lecture {
+    width: 30%;
+    padding-right: 15px;
+}
+
+.actions {
+    width: 30%;
+    text-align: right;
+}
+
+.total-count {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.section-title {
+    font-size: 1.3em;
+    margin: 20px 0 10px 0;
+    color: #333;
+    font-weight: bold;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .action-btn:hover {
+        background-color: #45a049;
+    }
+
+.no-data {
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+
+.course-container {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

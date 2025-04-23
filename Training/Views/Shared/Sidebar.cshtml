@@ -1,0 +1,42 @@
+﻿@* Sidebar.cshtml *@
+@{
+    var title = ViewBag.Title as string ?? "";
+}
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3">
+    <div class="container-fluid">
+        <span class="navbar-brand fw-bold text-dark">Chi Bao</span>
+        <div class="d-flex align-items-center">
+            <a href="#" class="text-dark me-3">
+                <i class="bi bi-person-circle fs-4"></i>
+            </a>
+            <a href="#" class="text-dark">
+                <i class="bi bi-gear-fill fs-4"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="col-md-2 bg-light sidebar pt-4">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @(title == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Dashboard")">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(title == "Information" ? "active" : "")" href="@Url.Action("Index", "Information")">
+                <i class="bi bi-info-circle me-2"></i> Information
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(title == "My Courses" ? "active" : "")" href="@Url.Action("My_Course", "Manage")">
+                <i class="bi bi-journal-text me-2"></i> My Courses
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(title == "Time Management" ? "active" : "")" href="@Url.Action("Index", "Time")">
+                <i class="bi bi-calendar-week me-2"></i> Time Management
+            </a>
+        </li>
+    </ul>
+</div>

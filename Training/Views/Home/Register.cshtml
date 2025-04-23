@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Đăng Ký Học Viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="/">Trung Tâm Đào Tạo</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-item nav-link text-primary" href="/Course">Khóa Học</a>
+                    <a class="nav-item nav-link text-primary" href="/Student">Học Viên</a>
+                    <a class="nav-item nav-link text-primary" href="/Registration">Đăng Ký</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <footer class="text-white text-center py-3 mt-5">
+        © 2025 Trung Tâm Đào Tạo. All rights reserved.
+    </footer>
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>

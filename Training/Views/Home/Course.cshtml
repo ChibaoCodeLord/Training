@@ -1,0 +1,389 @@
+﻿@model List<Training.Models.CourseModel>
+@using System.Web
+@{
+    ViewBag.Title = "Course";
+    var role = Context.Session.GetString("UserRole");
+    Layout = role switch
+    {
+        "Student" => "~/Views/Shared/Layout_User.cshtml",
+        "admin" => "~/Views/Shared/Layout_Admin.cshtml",
+        _ => "~/Views/Shared/_Layout.cshtml"
+    };
+}
+
+<link rel="stylesheet" href="~/css/Course.css" />
+<link rel="stylesheet" href="~/css/SlideShow.css" />
+<link rel="stylesheet" href="~/css/modal.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<style>
+    .registered-students {
+        float: right; 
+        text-align: right; 
+        margin-right: 0px; 
+        display: flex; 
+        align-items: center; 
+    }
+
+        .registered-students i {
+            margin-right: 5px; /* Khoảng cách giữa biểu tượng người và văn bản */
+        }
+</style>
+<body>
+
+    <div class="SlideShow">
+        <div class="List-images">
+            <img src="@Url.Content("~/images/Course_sql.jpg")" alt="Khóa học SQL" />
+            <img src="@Url.Content("~/images/Course_Python.jpg")" alt="Khóa học Python" />
+            <img src="@Url.Content("~/images/Course_java.jpg")" alt="Khóa học Java" />
+        </div>
+    </div>
+    @if (TempData["Msg"] != null)
+    {
+        <div class="tempdata-container">
+            <table class="tempdata-table">
+                <tr>
+                    <td>@TempData["Msg"]</td>
+                </tr>
+            </table>
+        </div>
+    }
+
+
+    <section class="hero-section">
+        <div class="navbar">
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index", "Course")">Tất cả khóa học</a>
+                <a href="@Url.Action("Algorithm", "Course")">Thuật toán</a>
+                <a href="@Url.Action("BasicKnowledge", "Course")">Kiến thức cơ sở</a>
+                <a href="@Url.Action("BasicProgramming", "Course")">Lập trình cơ sở</a>
+                <a href="@Url.Action("AdvancedProgramming", "Course")">Lập trình nâng cao</a>
+                <a href="@Url.Action("ProblemSolving", "Course")">Giải quyết vấn đề</a>
+                <a href="@Url.Action("ProblemSolving", "Course")">Thuật toán</a>
+                <a href="@Url.Action("ProblemSolving", "Course")">Nâng cao</a>
+            </div>
+
+            <div class="search-container">
+                @using (Html.BeginForm("Search", "Course", FormMethod.Get))
+                {
+                    <input type="text" name="query" placeholder="Nhập nội dung tìm kiếm..." class="search-input">
+                    <button type="submit" class="search-button"></button>
+                }
+            </div>
+            @if (role == "admin")
+            {
+                <button id="createCourseBtn" class="add-button">Tạo khóa học</button>
+            }
+        </div>
+</section>
+
+<pre>
+    @* In khoảng trắng nè *@
+</pre>
+
+@if (Model.Any())
+{
+    <div class="course-carousel-wrapper">
+ 
+           <button class="carousel-btn left-btn" id="prevBtn">&#10094;</button>
+ 
+        <div class="course-carousel" id="courseCarousel">
+
+            @foreach (var item in Model)
+            {
+              
+                <div class="course-card">
+                    @if (role=="admin")
+                    {
+                        <a href="javascript:void(0);"
+                           class="edit-course-btn"
+                           data-id="@item.CourseId"
+                           data-name="@item.CourseName"
+                           data-start="@item.StartDate.ToString("yyyy-MM-dd")"
+                           data-end="@item.EndDate.ToString("yyyy-MM-dd")"
+                           data-tuition="@item.TuitionFee"
+                           data-max="@item.MaxStudents"
+                           data-img="@Url.Content(item.CourseImagePath)"
+                           data-desc="@item.Description"
+                           data-lecture="@item.Lecture"
+                           onclick="openEditModalFromElement(this)">✎</a>
+                        <form asp-action="Delete" asp-controller="Home" asp-route-id="@item.CourseId" method="post" onsubmit="return confirm('Bạn có chắc muốn xoá khóa học này?');">
+                            <button type="submit" class="delete-course-btn">&times;</button>
+                        </form>
+                    }                                          
+
+                    <div class="blog-entry align-self-stretch">
+                        <a href="@Url.Action("Detail_Course", "Course", new { id = item.CourseId })" class="block-20"
+                           style="background-image: url('@Url.Content(item.CourseImagePath)');">
+                        </a>
+                        <div class="text p-4 d-block">
+                            <div>
+                                <i class="far fa-calendar-alt"></i>
+                                <a href="#">@item.StartDate.ToString("dd/MM/yyyy")</a>
+                                    <span class="registered-students">
+                                        <i class="fas fa-user"></i>
+                                        @item.count/@item.MaxStudents 
+                                    </span>
+                                </div>
+                           
+                            <h3 class="heading mb-4">
+                                <a >
+                                    @item.CourseName
+                                </a>
+                            </h3>
+                            <p>@item.Description</p>
+                            <div>
+                                <span class="icon-cash">₫</span>
+                                <a href="#">@item.TuitionFee.ToString("N0") VND</a>
+                            </div>
+                            <a asp-controller="Course" asp-action="Detail_Course" asp-route-id="@item.CourseId" class="ion-ios-arrow-forward"> View Details </a>
+                                @{
+                                    var today = DateOnly.FromDateTime(DateTime.Now);
+                                }
+
+                                @if (role == "Student")
+                                {
+                                    if (item.EndDate < today)
+                                    {
+                                        <button class="Register-Course" style="background-color: gray;" disabled>Đã kết thúc</button>
+                                    }
+                                    else if (item.StartDate <= today && item.EndDate >= today)
+                                    {
+                                        <button class="Register-Course" style="background-color: orange;" disabled>Đang diễn ra</button>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="Register" asp-controller="RegisterCourse" asp-route-id="@item.CourseId" method="post" onsubmit="return confirm('Bạn có chắc chắn đăng kí khóa học này không?')">
+                                            <button type="submit" class="Register-Course">Register now</button>
+                                        </form>
+                                    }
+                                }
+
+                        </div>
+                    </div>
+                </div>
+            }
+        
+    </div>
+
+    <button class="carousel-btn right-btn" id="nextBtn">&#10095;</button>
+</div>
+}else {
+        <div class="no-courses">
+            <p>Không có khóa học</p>
+        </div>
+}
+@*Tạo khóa học mới*@
+<div id="courseModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Tạo Khóa Học Mới</h2>
+        @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                <label for="CourseName">Tên khóa học:</label>
+                <input type="text" id="CourseName" name="CourseName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="StartDate">Ngày bắt đầu:</label>
+                <input type="date" id="StartDate" name="StartDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="EndDate">Ngày kết thúc:</label>
+                <input type="date" id="EndDate" name="EndDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="TuitionFee">Học phí (VND):</label>
+                <input type="number" id="TuitionFee" name="TuitionFee" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="MaxStudents">Số lượng học viên tối đa:</label>
+                <input type="number" id="MaxStudents" name="MaxStudents" min="1" required>
+            </div>
+                
+            <div class="form-group">
+                <label for="CourseImageFile">Ảnh khóa học:</label>
+                <input type="file" id="CourseImageFile" name="CourseImageFile" accept="image/*">
+            </div>
+            <img id="previewCourseImage" src="" style="width:100px; height:auto; margin-top:10px;" />
+
+            <div class="form-group">
+                <label for="Description">Mô tả:</label>
+                <textarea id="Description" name="Description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="Lecture">Giảng viên:</label>
+                <input type="text" id="Lecture" name="Lecture">
+            </div>
+
+            <button type="submit" class="submit-btn">Tạo khóa học</button>
+        }
+    </div>
+</div>
+@* Sửa khóa học  *@
+<!-- Modal chỉnh sửa khóa học -->
+<div id="editCourseModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">×</span>
+        <h2>Chỉnh sửa Khóa Học</h2>
+        @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "editCourseForm" }))
+        {
+            @Html.Hidden("CourseId", null, new { id = "editCourseId" })
+
+            <div class="form-group">
+                <label for="editCourseName">Tên khóa học:</label>
+                <input type="text" id="editCourseName" name="CourseName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editStartDate">Ngày bắt đầu:</label>
+                <input type="date" id="editStartDate" name="StartDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editEndDate">Ngày kết thúc:</label>
+                <input type="date" id="editEndDate" name="EndDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editTuitionFee">Học phí (VND):</label>
+                <input type="number" id="editTuitionFee" name="TuitionFee" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editMaxStudents">Số lượng học viên tối đa:</label>
+                <input type="number" id="editMaxStudents" name="MaxStudents" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ảnh hiện tại:</label><br />
+                <img id="editCourseImagePreview" src="" alt="Ảnh hiện tại" style="max-width: 120px; max-height: 100px; margin-bottom: 10px;" />
+                <input type="file" id="editCourseImageFile" name="CourseImageFile" accept="image/*" class="form-control" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="editDescription">Mô tả:</label>
+                <textarea id="editDescription" name="Description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="editLecture">Giảng viên:</label>
+                <input type="text" id="editLecture" name="Lecture">
+            </div>
+
+            <button type="submit" class="submit-btn">Cập nhật</button>
+        }
+    </div>
+</div>
+</body>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelector('.List-images');
+            let currentSlide = 0;
+            const slideCount = document.querySelectorAll('.List-images img').length;
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slideCount;
+                slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+
+            setInterval(nextSlide, 4000); // Chuyển slide mỗi 4 giây
+
+            // Modal logic
+            const modal = document.getElementById("courseModal");
+            const btn = document.getElementById("createCourseBtn");
+            const span = document.getElementsByClassName("close")[0];
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const carousel = document.getElementById('courseCarousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            let scrollAmount = 0;
+            const cardWidth = carousel.querySelector('.course-card').offsetWidth + 20; // 20 là gap
+
+            nextBtn.addEventListener('click', () => {
+                scrollAmount += cardWidth * 4; // scroll 4 items
+                carousel.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                scrollAmount -= cardWidth * 4;
+                if (scrollAmount < 0) scrollAmount = 0;
+                carousel.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+            });
+            function openEditModalFromElement(el) {
+            document.getElementById('editCourseId').value = el.dataset.id;
+            document.getElementById('editCourseName').value = el.dataset.name;
+            document.getElementById('editStartDate').value = el.dataset.start;
+            document.getElementById('editEndDate').value = el.dataset.end;
+            document.getElementById('editTuitionFee').value = el.dataset.tuition;
+            document.getElementById('editMaxStudents').value = el.dataset.max;
+            document.getElementById('editDescription').value = el.dataset.desc;
+            document.getElementById('editLecture').value = el.dataset.lecture;
+
+            document.getElementById('editCourseImagePreview').src = el.dataset.img;
+
+            document.getElementById("editCourseForm").action = "/Home/Edit/" + el.dataset.id;
+
+            document.getElementById('editCourseModal').style.display = 'block';
+        }
+
+
+
+        function closeEditModal() {
+            document.getElementById('editCourseModal').style.display = 'none';
+        }
+
+        // Tự đóng khi bấm ra ngoài modal
+        window.onclick = function (event) {
+            var modal = document.getElementById('editCourseModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+    <script>
+        document.getElementById('editCourseImageFile').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('editCourseImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    
+}
+

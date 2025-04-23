@@ -1,0 +1,295 @@
+﻿@model IEnumerable<Training.Models.Course_RegisteredModel>
+@{
+    ViewBag.Title = "Doanh thu theo tháng";
+    Layout = null;
+
+    var currentYear = DateTime.Now.Year;
+    var years = Enumerable.Range(currentYear - 4, 5).ToList();
+    var months = Enumerable.Range(1, 12).ToList();
+
+    var dataByYear = new Dictionary<int, Dictionary<string, List<decimal>>>();
+    foreach (var year in years)
+    {
+        var grouped = Model
+            .Where(x => x.RegistrationDate.HasValue && x.RegistrationDate.Value.Year == year)
+            .GroupBy(x => x.NameCourse)
+            .ToDictionary(
+                g => g.Key,
+                g => months.Select(m =>
+                    g.Where(x => x.RegistrationDate.Value.Month == m)
+                     .Sum(x => x.Course.TuitionFee)
+                ).ToList()
+            );
+        dataByYear[year] = grouped;
+    }
+
+    var courses = Model.Select(x => x.NameCourse).Distinct().ToList();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/css/Sidebar.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .chart-container {
+            width: 100%;
+            margin: 30px auto;
+        }
+
+        .table-container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table {
+            background-color: rgba(75, 192, 192, 0.1);
+        }
+
+        .table th {
+            background-color: rgba(75, 192, 192, 0.2);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3">
+            <div class="container-fluid">
+                <span class="navbar-brand fw-bold text-dark">Admin Panel</span>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="text-dark me-3">
+                        <i class="bi bi-person-circle fs-4"></i>
+                    </a>
+                    <a href="#" class="text-dark">
+                        <i class="bi bi-gear-fill fs-4"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main layout -->
+        <div class="row">
+            <!-- Sidebar -->
+            @Html.Partial("Sidebar_Admin")
+
+            <!-- Content -->
+            <div class="col-md-10 content-area">
+                <h3 class="text-center mb-4">@ViewBag.Title</h3>
+
+                <!-- Filters -->
+                <div class="filter-container">
+                    <div class="filter-item">
+                        <label for="yearSelect" class="form-label">Chọn năm:</label>
+                        <select id="yearSelect" class="form-select">
+                            @foreach (var year in years)
+                            {
+                                if (year == currentYear)
+                                {
+                                    <option value="@year" selected="selected">@year</option>
+                                }
+                                else
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="courseSelect" class="form-label">Chọn môn học:</label>
+                        <select id="courseSelect" class="form-select">
+                            <option value="all">-- Tất cả môn học --</option>
+                            @foreach (var course in courses)
+                            {
+                                <option value="@course">@course</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Chart + Table -->
+                <div class="row">
+                    <div class="col-md-8 chart-container">
+                        <canvas id="RevenueChart" height="120"></canvas>
+                    </div>
+                    <div class="col-md-4 table-container">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Môn học</th>
+                                    <th>Doanh thu</th>
+                                    <th>Đăng ký</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseStats"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const months = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(months));
+        const dataByYear = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(dataByYear));
+        const currentYear = @currentYear;
+        const ctx = document.getElementById("RevenueChart").getContext("2d");
+        let chart = null;
+
+        const colors = [
+            'rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)', 'rgba(255, 206, 86, 1)', 'rgba(54, 162, 235, 1)'
+        ];
+
+        function updateChart(year, courseName) {
+            const grouped = dataByYear[year] || {};
+            const datasets = [];
+            const tableRows = [];
+            let totalRevenueAllCourses = 0;
+            let totalRegistrationsAllCourses = 0;
+
+            if (courseName === 'all') {
+                const totalMonthlyRevenue = months.map((_, monthIndex) =>
+                    Object.values(grouped).reduce((sum, courseData) => sum + courseData[monthIndex], 0)
+                );
+
+                Object.keys(grouped).forEach((name, index) => {
+                    const courseData = grouped[name];
+                    const totalRevenue = courseData.reduce((sum, val) => sum + val, 0);
+                    const totalRegistrations = courseData.filter(x => x > 0).length;
+
+                    totalRevenueAllCourses += totalRevenue;
+                    totalRegistrationsAllCourses += totalRegistrations;
+
+                    tableRows.push(`<tr>
+                        <td>${name}</td>
+                        <td>${totalRevenue.toLocaleString()}</td>
+                        <td>${totalRegistrations}</td>
+                    </tr>`);
+                });
+
+                tableRows.push(`<tr>
+                    <td><strong>Tổng doanh thu</strong></td>
+                    <td><strong>${totalRevenueAllCourses.toLocaleString()}</strong></td>
+                    <td><strong>${totalRegistrationsAllCourses}</strong></td>
+                </tr>`);
+
+                datasets.push({
+                    label: `Tất cả môn học (${year})`,
+                    data: totalMonthlyRevenue,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4
+                });
+            } else {
+                if (grouped[courseName]) {
+                    const courseData = grouped[courseName];
+                    const totalRevenue = courseData.reduce((sum, val) => sum + val, 0);
+                    const totalRegistrations = courseData.filter(x => x > 0).length;
+
+                    tableRows.push(`<tr>
+                        <td>${courseName}</td>
+                        <td>${totalRevenue.toLocaleString()}</td>
+                        <td>${totalRegistrations}</td>
+                    </tr>`);
+
+                    datasets.push({
+                        label: `${courseName} (${year})`,
+                        data: courseData,
+                        backgroundColor: colors[0],
+                        borderColor: colors[0],
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    });
+                }
+            }
+
+            document.getElementById('courseStats').innerHTML = tableRows.join('');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months.map(m => `Tháng ${m}`),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Doanh thu (VNĐ)'
+                            },
+                            ticks: {
+                                callback: value => value.toLocaleString() + ' đ'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tháng'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: context => {
+                                    let label = context.dataset.label || '';
+                                    return label + ': ' + context.parsed.y.toLocaleString() + ' đ';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('courseSelect').addEventListener('change', function () {
+            updateChart(parseInt(document.getElementById('yearSelect').value), this.value);
+        });
+
+        document.getElementById('yearSelect').addEventListener('change', function () {
+            updateChart(parseInt(this.value), document.getElementById('courseSelect').value);
+        });
+
+        updateChart(currentYear, 'all');
+    </script>
+</body>
+</html>

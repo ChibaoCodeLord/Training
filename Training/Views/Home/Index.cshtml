@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Home";
+    var role = Context.Session.GetString("UserRole");
+    Layout = role switch
+    {
+        "Student" => "~/Views/Shared/Layout_User.cshtml",
+        "admin" => "~/Views/Shared/Layout_Admin.cshtml",
+        _ => "~/Views/Shared/_Layout.cshtml"
+    };
+
+}
+
+<section class="hero-section">
+    <div class="hero-text">
+        <h1>Welcome to my website</h1>
+        <p>Học cùng Chí Bảo nào!!!<br />No pain no gain</p>
+
+    </div>
+    <div class="hero-image">
+        <img src="@Url.Content("~/images/Back_Ground.jpg")" alt="Course Team" />
+
+    </div>
+</section>
