@@ -1,4 +1,5 @@
 ﻿
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Training.Data;
 using Training.Models;
@@ -15,8 +16,11 @@ namespace Training.Service
         public bool Create(Models.Infor account)
         {
             using var transaction = db.Database.BeginTransaction();
-
-            try
+            if (!Regex.IsMatch(account.PhoneNumber, "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"))
+            {
+                throw new Exception("Số điện thoại phải đủ 10 số");
+            }
+                try
             {
                 
                 if (db.Students.Any(s => s.Email == account.Email))

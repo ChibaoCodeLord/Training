@@ -62,13 +62,13 @@
                 <a href="@Url.Action("ProblemSolving", "Course")">Nâng cao</a>
             </div>
 
-            <div class="search-container">
-                @using (Html.BeginForm("Search", "Course", FormMethod.Get))
-                {
-                    <input type="text" name="query" placeholder="Nhập nội dung tìm kiếm..." class="search-input">
-                    <button type="submit" class="search-button"></button>
-                }
-            </div>
+            @* <div class="search-container"> *@
+            @*     @using (Html.BeginForm("Search", "Course", FormMethod.Get)) *@
+            @*     { *@
+            @*         <input type="text" name="query" placeholder="Nhập nội dung tìm kiếm..." class="search-input"> *@
+            @*         <button type="submit" class="search-button"></button> *@
+            @*     } *@
+            @* </div> *@
             @if (role == "admin")
             {
                 <button id="createCourseBtn" class="add-button">Tạo khóa học</button>

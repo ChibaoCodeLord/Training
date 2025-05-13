@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Tài khoản";
     Layout = null;
+    var role = Context.Session.GetString("UserRole");
 }
 
 
@@ -10,37 +11,39 @@
     <link href="~/css/Sidebar.css" rel="stylesheet " />
 </head> 
 
+@if (role == "admin")
+{
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 topbar">
+            <div class="container-fluid">
+                <span class="navbar-brand fw-bold text-dark">Admin Panel</span>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="text-dark me-3">
+                        <i class="bi bi-person-circle fs-4"></i>
+                    </a>
+                    <a href="#" class="text-dark">
+                        <i class="bi bi-gear-fill fs-4"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="row">
+            @Html.Partial("Sidebar_Admin")
 
-<div class="container-fluid">
-    <!-- TOPBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 topbar">
-        <div class="container-fluid">
-            <span class="navbar-brand fw-bold text-dark">Admin Panel</span>
-            <div class="d-flex align-items-center">
-                <a href="#" class="text-dark me-3">
-                    <i class="bi bi-person-circle fs-4"></i>
-                </a>
-                <a href="#" class="text-dark">
-                    <i class="bi bi-gear-fill fs-4"></i>
-                </a>
+
+            <div class="col-md-9 p-4 text-center">
+                <h2>@ViewData["Title"]</h2>
+                <p>Chào mừng bạn đến với trang quản lý tài khoản.</p>
+                <div class="avatar-container">
+                    <img src="~/images/Guitar.jpg" class="avatar-img" alt="Avatar" />
+                </div>
             </div>
         </div>
-    </nav>
-    <div class="row">
-        <!-- Sidebar -->
-        @Html.Partial("Sidebar_Admin")
 
-
-        <div class="col-md-9 p-4 text-center">
-            <h2>@ViewData["Title"]</h2>
-            <p>Chào mừng bạn đến với trang quản lý tài khoản.</p>
-
-            <!-- Avatar -->
-            <div class="avatar-container">
-                <img src="~/images/Guitar.jpg" class="avatar-img" alt="Avatar" />
-            </div>
-        </div>
     </div>
 
-</div>
-</div>
+}
+else
+{
+    <div>Bạn không được cấp quyền truy cập link này!</div>
+}

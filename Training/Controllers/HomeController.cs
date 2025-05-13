@@ -69,9 +69,7 @@ namespace Training.Controllers
             return View();
         }
 
-        // POST: CourseModels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourseModel courseModel, IFormFile CourseImageFile)
@@ -100,8 +98,6 @@ namespace Training.Controllers
                     TempData["Msg"] = "Học phí không hợp lệ";
                     return RedirectToAction(nameof(Course));
                 }
-
-                // Xử lý upload ảnh
                 if (CourseImageFile != null && CourseImageFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine("wwwroot", "images", "courses");
@@ -164,9 +160,7 @@ namespace Training.Controllers
             return View(courseModel);
         }
 
-        // POST: CourseModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("CourseId,CourseName,StartDate,EndDate,TuitionFee,MaxStudents,Description,Lecture")] CourseModel courseModel, IFormFile CourseImageFile)
@@ -212,7 +206,6 @@ namespace Training.Controllers
 
             try
             {
-                // Nếu có ảnh mới, tiến hành lưu
                 if (CourseImageFile != null && CourseImageFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine("wwwroot", "images", "courses");
@@ -228,13 +221,8 @@ namespace Training.Controllers
                     {
                         await CourseImageFile.CopyToAsync(stream);
                     }
-
-                    // Cập nhật ảnh mới
                     dbCourse.CourseImagePath = $"/images/courses/{uniqueFileName}";
                 }
-                // Nếu không có ảnh mới, giữ nguyên ảnh cũ (không cần xử lý gì thêm)
-
-                // Cập nhật thông tin khác
                 dbCourse.CourseName = courseModel.CourseName;
                 dbCourse.StartDate = courseModel.StartDate;
                 dbCourse.EndDate = courseModel.EndDate;
@@ -271,8 +259,6 @@ namespace Training.Controllers
         }
 
 
-
-        // GET: CourseModels/Delete/5
         [HttpPost]
         public async Task<JsonResult> Delete_Registered([FromBody] dynamic data)
         {
@@ -304,29 +290,21 @@ namespace Training.Controllers
             return Json(new { success = true, message = "Hủy đăng ký khóa học thành công." });
         }
 
-
-
-        // POST: CourseModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            // Kiểm tra id hợp lệ
             if (string.IsNullOrEmpty(id))
             {
                 TempData["Msg"] = "ID khóa học không hợp lệ.";
                 return RedirectToAction(nameof(Course));
             }
-
-            // Tìm khóa học
             var courseModel = await _context.Courses.FindAsync(id);
             if (courseModel == null)
             {
                 TempData["Msg"] = "Không tìm thấy khóa học để xóa.";
                 return RedirectToAction(nameof(Course));
             }
-
-            // Xóa các đăng ký liên quan trong CourseRegistrations
             try
             {
                 var registrations = await _context.CourseRegistrations
